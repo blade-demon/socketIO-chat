@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SocketIO Demo</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body class="chat">
+    <div class="chat__sidebar">
+        <h3>People</h3>
+        <div class="user"></div>
+    </div>
+    <div class="chat__main">
+        <!--p> Welcome to the chat app</p-->
+        <ol id="messages" class="chat__messages"></ol>
+        <div class="chat__footer">
+            <form id="message-form">
+                <input name="message" type="text" placeholder="Message" />
+                <button>Send</button>
+            </form>
+            <button id="send-location">Send location</button>
+        </div>
+    </div>
+    <script id="message-template" type="text/template">
+        <li class="message">
+            <div class="message__title">
+                <h4>{{from}}</h4>
+                <span>{{createdAt}}</span>
+            </div>
+            <div class="message__Body">
+                <p>{{text}}</p>
+            </div>
+        </li>
+    </script>
+
+    <script id="locationmessage-template" type="text/template">
+        <li class="message">
+            <div class="message__title">
+                <h4>{{from}}</h4>
+                <span>{{createdAt}}</span>
+            </div>
+            <div class="message__Body">
+                <p><a target="_blank" href="{{url}}">My current location</a></p>
+            </div>
+        </li>
+    </script>
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/socket.io/1.7.3/socket.io.min.js"></script>
+    <script src="js/mustache.js"></script>
+    <script src="js/moment.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>
