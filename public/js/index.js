@@ -6,7 +6,9 @@ function  scrollToBottom() {
   var newMessage = messages.children('li:last-child');
   // Heights
   var clientHeight = messages.prop('clientHeight');
+  console.log(clientHeight);
   var scrollTop = messages.prop('scrollTop');
+  console.log(scrollTop);
   var scrollHeight = messages.prop('scrollHeight');
   var newMessageHeight = newMessage.innerHeight();
   var lastMessageHeight = newMessage.prev().innerHeight();
