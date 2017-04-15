@@ -1,5 +1,20 @@
 var socket = io();
 
+function  scrollToBottom() {
+  // Selectors
+  var messages = jQuery('#messages');
+  var newMessage = messages.children('li:last-child');
+  // Heights
+  var clientHeight = messages.prop('clientHeight');
+  var scrollTop = messages.prop('scrollTop');
+  var scrollHeight = messages.prop('scrollHeight');
+  var newMessageHeight = newMessage.innerHeight();
+  var lastMessageHeight = newMessage.prev().innerHeight();
+  if(clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+    messages.scrollTop(scrollHeight);
+  }
+}
+
 socket.on('connect', function () {
   console.log('Connected to server...');
 });
@@ -18,6 +33,7 @@ socket.on('newMessage', (message) => {
   });
 
   jQuery('#messages').append(html);
+  scrollToBottom();
 });
 
 jQuery('#message-form').on('submit', function (e) {
@@ -39,6 +55,7 @@ socket.on('newLocationMessage', (message) => {
     createdAt: formmatedTime
   });
   jQuery('#messages').append(html);
+  scrollToBottom();
 });
 
 
@@ -48,7 +65,7 @@ locationButton.on('click', function () {
     return alert('Geolocation not supported on your browser.');
   }
   navigator.geolocation.getCurrentPosition(function (position) {
-    console.log("position: " + position);
+    //console.log("position: " + position);
     socket.emit('createLocationMessage', {
       latitude: position.coords.latitude,
       longitude: position.coords.longitude
