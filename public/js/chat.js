@@ -6,9 +6,7 @@ function  scrollToBottom() {
   var newMessage = messages.children('li:last-child');
   // Heights
   var clientHeight = messages.prop('clientHeight');
-  console.log(clientHeight);
   var scrollTop = messages.prop('scrollTop');
-  console.log(scrollTop);
   var scrollHeight = messages.prop('scrollHeight');
   var newMessageHeight = newMessage.innerHeight();
   var lastMessageHeight = newMessage.prev().innerHeight();
@@ -18,6 +16,15 @@ function  scrollToBottom() {
 }
 
 socket.on('connect', function () {
+  var params = jQuery.deparam(window.location.search);
+  socket.emit('join', params, function (err) {
+    if(err) {
+      alert(err);
+      window.location.href='/';
+    } else {
+      console.log('No error');
+    }
+  });
   console.log('Connected to server...');
 });
 

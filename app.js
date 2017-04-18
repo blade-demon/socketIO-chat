@@ -4,7 +4,7 @@ var path = require("path");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
 var {generateMessage, generateLocationMessage} = require("./utils/message");
-
+var {isRealString} = require('./utils/validation');
 var routes = require("./routes/index");
 var app = express();
 
@@ -28,6 +28,13 @@ io.sockets.on('connection', (socket) => {
   socket.emit('newMessage', generateMessage('Admin', "Welcome to the chat app"));
 
   socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
+
+  socket.on('join', (params, callback) => {
+    if(!isRealString(params.name)|| !isRealString(params.room)) {
+      callback('name and room are required!');
+    }
+    callback();
+  });
 
   socket.on('createMessage', (message, callback) => {
     console.log("createMessage", message);
