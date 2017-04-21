@@ -5456,7 +5456,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var socket = __WEBPACK_IMPORTED_MODULE_1__socket_io_min_js___default()();
 
-function  scrollToBottom() {
+function scrollToBottom() {
   // Selectors
   var messages = __WEBPACK_IMPORTED_MODULE_0__jquery_min_js___default()('#messages');
   var newMessage = messages.children('li:last-child');
@@ -5466,7 +5466,7 @@ function  scrollToBottom() {
   var scrollHeight = messages.prop('scrollHeight');
   var newMessageHeight = newMessage.innerHeight();
   var lastMessageHeight = newMessage.prev().innerHeight();
-  if(clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+  if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
     messages.scrollTop(scrollHeight);
   }
 }
@@ -5474,9 +5474,9 @@ function  scrollToBottom() {
 socket.on('connect', function () {
   var params = __WEBPACK_IMPORTED_MODULE_0__jquery_min_js___default.a.deparam(window.location.search);
   socket.emit('join', params, function (err) {
-    if(err) {
+    if (err) {
       alert(err);
-      window.location.href='/';
+      window.location.href = '/';
     } else {
       console.log('No error');
     }
@@ -5485,7 +5485,18 @@ socket.on('connect', function () {
 });
 
 socket.on('disconnect', () => {
-  console.log('Disconnected to server.');
+  console.log('Disconnected from server.');
+});
+
+socket.on('updateUserList', (users) => {
+  console.log("updateUserList...");
+  var ol = __WEBPACK_IMPORTED_MODULE_0__jquery_min_js___default()('<ol></ol>');
+
+  users.forEach(function (user) {
+    ol.append(__WEBPACK_IMPORTED_MODULE_0__jquery_min_js___default()('<li></li>').text(user));
+  });
+
+  __WEBPACK_IMPORTED_MODULE_0__jquery_min_js___default()('#users').html(ol);
 });
 
 socket.on('newMessage', (message) => {
@@ -5522,7 +5533,6 @@ socket.on('newLocationMessage', (message) => {
   __WEBPACK_IMPORTED_MODULE_0__jquery_min_js___default()('#messages').append(html);
   scrollToBottom();
 });
-
 
 var locationButton = __WEBPACK_IMPORTED_MODULE_0__jquery_min_js___default()('#send-location');
 locationButton.on('click', function () {

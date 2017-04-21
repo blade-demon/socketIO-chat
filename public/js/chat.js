@@ -7,7 +7,7 @@ import Mustache from './mustache.js';
 
 var socket = io();
 
-function  scrollToBottom() {
+function scrollToBottom() {
   // Selectors
   var messages = jQuery('#messages');
   var newMessage = messages.children('li:last-child');
@@ -17,7 +17,7 @@ function  scrollToBottom() {
   var scrollHeight = messages.prop('scrollHeight');
   var newMessageHeight = newMessage.innerHeight();
   var lastMessageHeight = newMessage.prev().innerHeight();
-  if(clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+  if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
     messages.scrollTop(scrollHeight);
   }
 }
@@ -25,9 +25,9 @@ function  scrollToBottom() {
 socket.on('connect', function () {
   var params = jQuery.deparam(window.location.search);
   socket.emit('join', params, function (err) {
-    if(err) {
+    if (err) {
       alert(err);
-      window.location.href='/';
+      window.location.href = '/';
     } else {
       console.log('No error');
     }
@@ -36,7 +36,18 @@ socket.on('connect', function () {
 });
 
 socket.on('disconnect', () => {
-  console.log('Disconnected to server.');
+  console.log('Disconnected from server.');
+});
+
+socket.on('updateUserList', (users) => {
+  console.log("updateUserList...");
+  var ol = jQuery('<ol></ol>');
+
+  users.forEach(function (user) {
+    ol.append(jQuery('<li></li>').text(user));
+  });
+
+  jQuery('#users').html(ol);
 });
 
 socket.on('newMessage', (message) => {
@@ -73,7 +84,6 @@ socket.on('newLocationMessage', (message) => {
   jQuery('#messages').append(html);
   scrollToBottom();
 });
-
 
 var locationButton = jQuery('#send-location');
 locationButton.on('click', function () {

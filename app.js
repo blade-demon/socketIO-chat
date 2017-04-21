@@ -4,6 +4,7 @@ var path = require("path");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
 var {generateMessage, generateLocationMessage} = require("./utils/message");
+var {Users} = require('./utils/users');
 var {isRealString} = require('./utils/validation');
 var routes = require("./routes/index");
 var app = express();
@@ -21,9 +22,9 @@ app.use('/', routes);
 
 var server = http.createServer(app);
 var io = require("socket.io").listen(server);
-
-io.sockets.on('connection', (socket) => {
-  console.log('New user connected');
+var users = new Users();
+io.on('connection', (socket) => {
+  //console.log('New user connected');
   // From Admin,
   // socket.emit('newMessage', generateMessage('Admin', "Welcome to the chat app"));
   //
@@ -35,6 +36,10 @@ io.sockets.on('connection', (socket) => {
     }
 
     socket.join(params.room);
+    users.removeUser(socket.id);
+    users.addUser(socket.id, params.name, params.room);
+
+    io.to(params.room).emit('updateUserList', users.getUserList(params.room));
     socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
     socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined.`));
     callback();
@@ -44,7 +49,7 @@ io.sockets.on('connection', (socket) => {
     console.log("createMessage", message);
     io.emit('newMessage', generateMessage(message.from, message.text));
     //socket.broadcast.emit('newMessage', generatorMessage(message.from, message.text));
-    callback("This is from server.");
+    callback();
   });
 
   socket.on('createLocationMessage', (coords) => {
@@ -52,7 +57,11 @@ io.sockets.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('User was disconnected!');
+    var user = users.removeUser(socket.id);
+    if(user) {
+      io.to(user.room).emit('updateUserList', users.getUserList(user.room));
+      io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left.`));
+    }
   });
 });
 
