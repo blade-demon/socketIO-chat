@@ -4,6 +4,7 @@
  * Credits for the idea and Regex:
  * http://stevenbenner.com/2010/03/javascript-regex-trick-parse-a-query-string-into-an-object/
  */
+import jQuery from './jquery.min.js';
 (function($){
   $.deparam = $.deparam || function(uri){
       if(uri === undefined){

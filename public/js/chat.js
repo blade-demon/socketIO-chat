@@ -1,3 +1,10 @@
+import jQuery from './jquery.min.js';
+import io from './socket.io.min.js';
+import deparam from './deparam.js';
+import _ from './lodash.min.js';
+import moment from './moment.js';
+import Mustache from './mustache.js';
+
 var socket = io();
 
 function  scrollToBottom() {
